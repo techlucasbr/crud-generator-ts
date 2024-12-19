@@ -1,0 +1,35 @@
+{
+  "name": "crud-generator-ts",
+  "version": "1.0.5",
+  "description": "CRUD generator for TypeScript Express applications",
+  "main": "dist/generator.js",
+  "bin": {
+    "generate-crud": "./bin/generate.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "typescript",
+    "crud",
+    "generator",
+    "express",
+    "typeorm"
+  ],
+  "author": "Lucas Gabriel Pereira",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "fs-extra": "^11.1.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ]
+}
