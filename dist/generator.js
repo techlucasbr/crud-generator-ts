@@ -15,7 +15,7 @@ const generateFiles = (resourceName) => {
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity({
-  name: '${resourceName.toUpperCase()}',
+  name: '${resourceName.replace(/([A-Z])/g, '_$1').toUpperCase()}',
   schema: process.env.DB_CONNECTION_SCHEMA,
 })
 export class ${className} {
