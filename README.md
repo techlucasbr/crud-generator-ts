@@ -11,20 +11,20 @@ npm install -g crud-generator-ts
 ## Usage
 
 ```bash
-generate-crud <nome-do-recurso>
+generate-crud <resource-name>
 ```
 
 ## Example
 
 ```bash
-generate-crud User
+generate-crud userType
 ```
 
 This command will generate:
-- Entity
-- Controller
-- Repository
-- Routes
+- Entity (user-type.ts)
+- Controller (user-type-controller.ts)
+- Repository (user-type-repository.ts)
+- Routes (user-type.routes.ts)
 
 ## Recommended Directory Structure
 
@@ -36,14 +36,14 @@ your-project
 │   │   │   └── main.ts
 │   │   └── entity/
 │   │       ├── index.ts
-│   │       └── user.ts
+│   │       └── user-type.ts
 │   ├── controllers/
-│   │   └── user-controller.ts
+│   │   └── user-type-controller.ts
 │   ├── repositories/
-│   │   └── user-repository.ts
+│   │   └── user-type-repository.ts
 │   └── routes/
 │       ├── index.ts
-│       └── user.routes.ts
+│       └── user-type.routes.ts
 ├── package.json
 └── tsconfig.json
 ```
@@ -51,7 +51,6 @@ your-project
 ## Prerequisites
 
 Your application must have:
-
 - Configured TypeORM
 - Configured Express
 - Configured TypeScript

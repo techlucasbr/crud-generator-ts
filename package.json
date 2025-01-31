@@ -1,6 +1,6 @@
 {
   "name": "crud-generator-ts",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "CRUD generator for TypeScript Express applications",
   "main": "dist/generator.js",
   "bin": {

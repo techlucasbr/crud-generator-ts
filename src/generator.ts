@@ -1,38 +1,41 @@
 import fs from 'fs';
 
 const generateFiles = (resourceName: string) => {
-  // Converte para PascalCase para nomes de classes
   const className = resourceName.charAt(0).toUpperCase() + resourceName.slice(1);
-  // Converte para kebab-case para nomes de arquivos
   const fileName = resourceName.toLowerCase().replace(/([A-Z])/g, '-$1').toLowerCase();
-
-  // Templates
   const entityTemplate = `
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, BeforeInsert, BeforeUpdate, DeleteDateColumn } from 'typeorm';
 
 @Entity({
-  name: '${resourceName.replace(/([A-Z])/g, '_$1').toUpperCase()}',
+  name: '${resourceName.replace(/([A-Z])/g, '_$1').toLowerCase()}',
   schema: process.env.DB_CONNECTION_SCHEMA,
 })
+
 export class ${className} {
-  @PrimaryColumn({ type: 'int', name: 'ID' })
+  @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  // Adicione suas colunas aqui
+  // add your columns here
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  created_at: Date;
+ 
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updated_at?: Date;
   
-  @Column({ type: 'varchar', length: 255, name: 'USUARIO_INCLUSAO' })
-  usuarioInclusao: string;
-
-  @Column({ type: 'timestamp', name: 'DATA_INCLUSAO' })
-  dataInclusao: Date;
-
-  @Column({ type: 'varchar', length: 255, name: 'USUARIO_ALTERACAO' })
-  usuarioAlteracao: string;
-
-  @Column({ type: 'timestamp', name: 'DATA_ALTERACAO' })
-  dataAlteracao: Date;
+  @DeleteDateColumn({ type: 'timestamp' })
+  deleted_at?: Date;
 }
 `;
+
 
   const controllerTemplate = `
 import { Body, Controller, Delete, Get, Path, Post, Put, Route, Tags } from 'tsoa';
@@ -146,7 +149,6 @@ ${fileName}Routes.delete('/:id', async (req, res) => {
 export default ${fileName}Routes;
 `;
 
-  // Criar diretórios se não existirem
   const dirs = [
     'src/infra/entity',
     'src/controllers',
@@ -160,15 +162,13 @@ export default ${fileName}Routes;
     }
   });
 
-  // Escrever arquivos
   fs.writeFileSync(`src/infra/entity/${fileName}.ts`, entityTemplate.trim());
   fs.writeFileSync(`src/controllers/${fileName}-controller.ts`, controllerTemplate.trim());
   fs.writeFileSync(`src/repositories/${fileName}-repository.ts`, repositoryTemplate.trim());
   fs.writeFileSync(`src/routes/${fileName}.routes.ts`, routeTemplate.trim());
 
-  // Atualizar index.ts das entidades
   const entityIndexPath = 'src/infra/entity/index.ts';
-  let entityIndexContent = fs.existsSync(entityIndexPath) 
+  let entityIndexContent = fs.existsSync(entityIndexPath)
     ? fs.readFileSync(entityIndexPath, 'utf8')
     : '';
 
@@ -188,7 +188,6 @@ export default ${fileName}Routes;
     fs.writeFileSync(entityIndexPath, entityIndexContent);
   }
 
-  // Atualizar routes/index.ts
   const routesIndexPath = 'src/routes/index.ts';
   let routesIndexContent = fs.existsSync(routesIndexPath)
     ? fs.readFileSync(routesIndexPath, 'utf8')
@@ -198,15 +197,13 @@ export default ${fileName}Routes;
   const routeUseLine = `routes.use('/${fileName}', isAuthenticated, ${fileName}Routes);\n`;
 
   if (!routesIndexContent.includes(routeImportLine)) {
-    // Adicionar import
     routesIndexContent = routeImportLine + routesIndexContent;
-    
-    // Adicionar route.use antes do export
+
     routesIndexContent = routesIndexContent.replace(
       /export default routes;/,
       `${routeUseLine}export default routes;`
     );
-    
+
     fs.writeFileSync(routesIndexPath, routesIndexContent);
   }
 
