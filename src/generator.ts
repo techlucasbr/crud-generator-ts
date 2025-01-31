@@ -4,7 +4,7 @@ const generateFiles = (resourceName: string) => {
   const className = resourceName.charAt(0).toUpperCase() + resourceName.slice(1);
   const fileName = resourceName.toLowerCase().replace(/([A-Z])/g, '-$1').toLowerCase();
   const entityTemplate = `
-import { Entity, Column, PrimaryColumn, BeforeInsert, BeforeUpdate, DeleteDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, BeforeInsert, BeforeUpdate, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
   name: '${resourceName.replace(/([A-Z])/g, '_$1').toLowerCase()}',
