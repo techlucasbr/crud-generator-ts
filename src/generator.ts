@@ -1,8 +1,13 @@
 import fs from 'fs';
+import path from 'path';
 
 const generateFiles = (resourceName: string) => {
   const className = resourceName.charAt(0).toUpperCase() + resourceName.slice(1);
-  const fileName = resourceName.toLowerCase().replace(/([A-Z])/g, '-$1').toLowerCase();
+  const fileName = resourceName
+    .replace(/([A-Z])/g, '-$1')
+    .toLowerCase()
+    .replace(/^-/, '');
+
   const entityTemplate = `
 import { Entity, Column, PrimaryColumn, BeforeInsert, BeforeUpdate, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -118,35 +123,35 @@ export class ${className}Repository {
 import { Router } from 'express';
 import { ${className}Controller } from '../controllers/${fileName}-controller';
 
-const ${fileName}Routes = Router();
-const ${resourceName.toLowerCase()}Controller = new ${className}Controller();
+const ${fileName.replace(/-/g, '')}Routes = Router();
+const ${resourceName}Controller = new ${className}Controller();
 
-${fileName}Routes.get('/', async (_req, res) => {
-  const response = await ${resourceName.toLowerCase()}Controller.getAll();
+${fileName.replace(/-/g, '')}Routes.get('/', async (_req, res) => {
+  const response = await ${resourceName}Controller.getAll();
   res.status(200).json(response);
 });
 
-${fileName}Routes.get('/:id', async (req, res) => {
-  const response = await ${resourceName.toLowerCase()}Controller.getById(parseInt(req.params.id));
+${fileName.replace(/-/g, '')}Routes.get('/:id', async (req, res) => {
+  const response = await ${resourceName}Controller.getById(parseInt(req.params.id));
   res.status(200).json(response);
 });
 
-${fileName}Routes.post('/', async (req, res) => {
-  const response = await ${resourceName.toLowerCase()}Controller.create(req.body);
+${fileName.replace(/-/g, '')}Routes.post('/', async (req, res) => {
+  const response = await ${resourceName}Controller.create(req.body);
   res.status(201).json(response);
 });
 
-${fileName}Routes.put('/:id', async (req, res) => {
-  const response = await ${resourceName.toLowerCase()}Controller.update(parseInt(req.params.id), req.body);
+${fileName.replace(/-/g, '')}Routes.put('/:id', async (req, res) => {
+  const response = await ${resourceName}Controller.update(parseInt(req.params.id), req.body);
   res.status(200).json(response);
 });
 
-${fileName}Routes.delete('/:id', async (req, res) => {
-  await ${resourceName.toLowerCase()}Controller.delete(parseInt(req.params.id));
+${fileName.replace(/-/g, '')}Routes.delete('/:id', async (req, res) => {
+  await ${resourceName}Controller.delete(parseInt(req.params.id));
   res.status(200).json({ message: 'Registro deletado com sucesso' });
 });
 
-export default ${fileName}Routes;
+export default ${fileName.replace(/-/g, '')}Routes;
 `;
 
   const dirs = [
@@ -154,7 +159,7 @@ export default ${fileName}Routes;
     'src/controllers',
     'src/repositories',
     'src/routes'
-  ];
+  ].map(dir => dir.split('/').join(path.sep));
 
   dirs.forEach(dir => {
     if (!fs.existsSync(dir)) {
