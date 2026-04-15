@@ -17,10 +17,9 @@ import { Entity, Column, PrimaryColumn, BeforeInsert, BeforeUpdate, DeleteDateCo
 })
 
 export class ${className} {
+  // teste
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
-
-  // add your columns here
 
   @Column({
     type: 'timestamp',

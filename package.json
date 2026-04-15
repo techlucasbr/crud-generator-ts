@@ -15,7 +15,8 @@
     "crud",
     "generator",
     "express",
-    "typeorm"
+    "typeorm",
+    "teste"
   ],
   "author": "Lucas Gabriel Pereira",
   "license": "MIT",
