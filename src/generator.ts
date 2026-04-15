@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const generateFiles = (resourceName: string) => {
+const generateFilesLucas = (resourceName: string) => {
   const className = resourceName.charAt(0).toUpperCase() + resourceName.slice(1);
   const fileName = resourceName
     .replace(/([A-Z])/g, '-$1')
