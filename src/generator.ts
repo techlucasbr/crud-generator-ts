@@ -165,11 +165,6 @@ export default ${fileName.replace(/-/g, '')}Routes;
     }
   });
 
-  fs.writeFileSync(`src/infra/entity/${fileName}.ts`, entityTemplate.trim());
-  fs.writeFileSync(`src/controllers/${fileName}-controller.ts`, controllerTemplate.trim());
-  fs.writeFileSync(`src/repositories/${fileName}-repository.ts`, repositoryTemplate.trim());
-  fs.writeFileSync(`src/routes/${fileName}.routes.ts`, routeTemplate.trim());
-
   const entityIndexPath = 'src/infra/entity/index.ts';
   let entityIndexContent = fs.existsSync(entityIndexPath)
     ? fs.readFileSync(entityIndexPath, 'utf8')
