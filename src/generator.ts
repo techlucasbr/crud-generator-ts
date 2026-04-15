@@ -17,7 +17,6 @@ import { Entity, Column, PrimaryColumn, BeforeInsert, BeforeUpdate, DeleteDateCo
 })
 
 export class ${className} {
-  // teste
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
